@@ -89,7 +89,6 @@ export const updateLockKeyMode = (
       },
     };
   } catch (error) {
-    // 例外発生時は元の状態を保持
     return currentMap;
   }
 };
@@ -112,7 +111,6 @@ export const toggleLockState = (
       return { ...currentMap };
     }
 
-    // blocked モードの場合は状態変更を受け付けない
     if (existingConfig.mode === 'blocked') {
       return currentMap;
     }
@@ -135,7 +133,7 @@ export const toggleLockState = (
  * 物理キーボードイベントからLockキー押下の警告・ガード判定を行います
  * @param keyCode イベントから取得されたキーコード（例: 'NumLock', 'CapsLock'）
  * @param currentMap 現在のLockStateMap
- * @returns ガードすべきかどうか、メッセージ、音声通知要否
+ * @returns ガード判定結果
  */
 export const evaluateKeyPressGuard = (
   keyCode: string,
@@ -194,20 +192,27 @@ export const evaluateKeyPressGuard = (
 };
 
 /**
- * デフォルトのプリセットプロファイル一覧を取得します
+ * デフォルトのプリセットプロファイル一覧を取得します (各プロファイルをディープコピーして明確に差別化)
  * @returns UserProfileの配列
  */
 export const getDefaultProfiles = (): UserProfile[] => {
+  // 1. 標準ガード
   const defaultState = createDefaultLockStateMap();
 
-  const gamingState = { ...defaultState };
-  gamingState.WinKey = { ...gamingState.WinKey, mode: 'blocked', preventAccidentalPress: true };
-  gamingState.NumLock = { ...gamingState.NumLock, mode: 'force_on' };
-  gamingState.CapsLock = { ...gamingState.CapsLock, mode: 'blocked' };
+  // 2. ゲーミング (Windowsキーを完全遮断、ScrollLockは標準)
+  const gamingState: LockStateMap = JSON.parse(JSON.stringify(defaultState));
+  gamingState.WinKey.mode = 'blocked';
+  gamingState.WinKey.preventAccidentalPress = true;
+  gamingState.ScrollLock.mode = 'normal';
 
-  const typingState = { ...defaultState };
-  typingState.Insert = { ...typingState.Insert, mode: 'blocked' };
-  typingState.CapsLock = { ...typingState.CapsLock, mode: 'blocked' };
+  // 3. 文書作成・タイピング集中 (NumLockは自由標準にし、Insert/CapsLock/ScrollLockを完全遮断)
+  const typingState: LockStateMap = JSON.parse(JSON.stringify(defaultState));
+  typingState.NumLock.mode = 'normal';
+  typingState.NumLock.isCurrentlyActive = true;
+  typingState.Insert.mode = 'blocked';
+  typingState.CapsLock.mode = 'blocked';
+  typingState.ScrollLock.mode = 'blocked';
+  typingState.WinKey.mode = 'normal';
 
   return [
     {
@@ -231,7 +236,7 @@ export const getDefaultProfiles = (): UserProfile[] => {
     {
       id: 'document-editing',
       name: '文書作成・タイピング集中モード',
-      description: 'Insert（上書きモード）キーとCapsLockを徹底ブロックします。',
+      description: 'Insert（上書きモード）キーとCapsLockを徹底ブロック。NumLockは自由化。',
       iconName: 'FileText',
       keyConfigs: typingState,
       createdAt: new Date().toISOString(),

@@ -26,7 +26,6 @@ describe('lockManager utility tests', () => {
   test('updateLockKeyMode should update specified lock key mode', () => {
     const updated = updateLockKeyMode(defaultStateMap, 'NumLock', 'blocked');
     expect(updated.NumLock.mode).toBe('blocked');
-    // 他のキーは変更されていないことを確認
     expect(updated.CapsLock.mode).toBe('blocked');
   });
 
@@ -48,7 +47,6 @@ describe('lockManager utility tests', () => {
   });
 
   test('toggleLockState should not toggle when mode is blocked', () => {
-    // CapsLock は blocked 設定
     const initialCapsState = defaultStateMap.CapsLock.isCurrentlyActive;
     const result = toggleLockState(defaultStateMap, 'CapsLock');
     expect(result.CapsLock.isCurrentlyActive).toBe(initialCapsState);
@@ -62,7 +60,7 @@ describe('lockManager utility tests', () => {
 
   test('evaluateKeyPressGuard should evaluate force_on when state becomes inactive', () => {
     const stateMap = { ...defaultStateMap };
-    stateMap.NumLock.isCurrentlyActive = false; // 強制ONなのにOFF状態になった場合
+    stateMap.NumLock.isCurrentlyActive = false;
     const result = evaluateKeyPressGuard('NumLock', stateMap);
     expect(result.shouldBlock).toBe(true);
     expect(result.alertMessage).toContain('常時ONに固定されています');
@@ -85,11 +83,17 @@ describe('lockManager utility tests', () => {
     expect(unknownResult.shouldBlock).toBe(false);
   });
 
-  test('getDefaultProfiles should return initial preset list', () => {
+  test('getDefaultProfiles should return distinct profiles for default, gaming, and document-editing', () => {
     const profiles = getDefaultProfiles();
-    expect(profiles.length).toBeGreaterThanOrEqual(3);
-    expect(profiles[0].id).toBe('default');
-    expect(profiles[1].id).toBe('gaming');
-    expect(profiles[2].id).toBe('document-editing');
+    expect(profiles.length).toBe(3);
+
+    // 1. 標準: NumLock = force_on
+    expect(profiles[0].keyConfigs.NumLock.mode).toBe('force_on');
+
+    // 2. ゲーミング: WinKey = blocked
+    expect(profiles[1].keyConfigs.WinKey.mode).toBe('blocked');
+
+    // 3. 文書作成: NumLock = normal
+    expect(profiles[2].keyConfigs.NumLock.mode).toBe('normal');
   });
 });
