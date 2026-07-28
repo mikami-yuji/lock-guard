@@ -3,6 +3,7 @@
 ## [1.0.0] - 2026-07-28
 
 ### Changed
+- ガイドバーを3ステップ案内（STEP 1: モード選択 → STEP 2: スクリプト出力 → STEP 3: スクリプト実行で自動ガード開始）に更新
 - プロジェクト名・リポジトリ名およびページタイトルを「Lock Guard」に統一（「Space Black Edition」等の補足表記を削除）
 - 初期リリース: Lock機能操作・誤押し防止パネル (Lock Guard)
 - NumLock / CapsLock / ScrollLock / Insert / WinLock の状態管理および擬似トグル機能

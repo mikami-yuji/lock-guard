@@ -12,7 +12,7 @@ import {
   getDefaultProfiles,
 } from '@/utils/lockManager';
 import { LockStateMap, LockMode, LockKeyConfig, UserProfile } from '@/types';
-import { Volume2, VolumeX, Terminal, Zap, ArrowRight, CheckCircle2 } from 'lucide-react';
+import { Volume2, VolumeX, Terminal, Zap, ArrowRight, CheckCircle2, ShieldCheck } from 'lucide-react';
 
 /**
  * Lock Guard ダッシュボード (1画面完結型)
@@ -162,7 +162,7 @@ export default function SingleViewportDashboard(): React.ReactElement {
         </div>
       </header>
 
-      {/* 2ステップ案内ガイドバー */}
+      {/* 3ステップ案内ガイドバー */}
       <div className="relative z-10 my-2 px-4 py-2.5 rounded-2xl bg-gradient-to-r from-zinc-900/95 via-zinc-900/90 to-zinc-900/95 border border-white/15 text-xs flex flex-wrap items-center justify-start gap-3 sm:gap-5 shadow-xl backdrop-blur-md">
         {/* STEP 1 */}
         <div className="flex items-center gap-3">
@@ -175,7 +175,7 @@ export default function SingleViewportDashboard(): React.ReactElement {
           </span>
         </div>
 
-        {/* 矢印 */}
+        {/* 矢印 1 */}
         <div className="hidden sm:flex items-center text-zinc-500 shrink-0">
           <ArrowRight className="w-4 h-4 text-sky-400 animate-pulse-arrow" />
         </div>
@@ -187,7 +187,23 @@ export default function SingleViewportDashboard(): React.ReactElement {
             STEP 2
           </span>
           <span className="text-zinc-200 font-medium">
-            右下の <span className="text-sky-200 font-bold bg-white/10 px-1.5 py-0.5 rounded border border-white/15">【PC適用スクリプトを出力】</span> ボタンを押してWindowsに適用
+            右下の <span className="text-sky-200 font-bold bg-white/10 px-1.5 py-0.5 rounded border border-white/15">【PC適用スクリプトを出力】</span> をクリック
+          </span>
+        </div>
+
+        {/* 矢印 2 */}
+        <div className="hidden md:flex items-center text-zinc-500 shrink-0">
+          <ArrowRight className="w-4 h-4 text-indigo-400 animate-pulse-arrow" />
+        </div>
+
+        {/* STEP 3 */}
+        <div className="flex items-center gap-3">
+          <span className="px-2.5 py-1 rounded-lg bg-indigo-500/15 border border-indigo-500/30 text-indigo-400 font-extrabold text-[11px] flex items-center gap-1.5 shrink-0 shadow-sm">
+            <ShieldCheck className="w-3.5 h-3.5" />
+            STEP 3
+          </span>
+          <span className="text-zinc-200 font-medium">
+            生成ファイルをダブルクリックして <span className="text-indigo-300 font-bold">PC自動ガード開始</span>！
           </span>
         </div>
       </div>
