@@ -163,9 +163,9 @@ export default function SingleViewportDashboard(): React.ReactElement {
       </header>
 
       {/* 2ステップ案内ガイドバー */}
-      <div className="relative z-10 my-2 px-4 py-2.5 rounded-2xl bg-gradient-to-r from-zinc-900/95 via-zinc-900/90 to-zinc-900/95 border border-white/15 text-xs flex flex-col sm:flex-row items-center justify-between gap-3 shadow-xl backdrop-blur-md">
+      <div className="relative z-10 my-2 px-4 py-2.5 rounded-2xl bg-gradient-to-r from-zinc-900/95 via-zinc-900/90 to-zinc-900/95 border border-white/15 text-xs flex flex-wrap items-center justify-start gap-3 sm:gap-5 shadow-xl backdrop-blur-md">
         {/* STEP 1 */}
-        <div className="flex items-center gap-3 w-full sm:w-auto">
+        <div className="flex items-center gap-3">
           <span className="px-2.5 py-1 rounded-lg bg-emerald-500/15 border border-emerald-500/30 text-emerald-400 font-extrabold text-[11px] flex items-center gap-1.5 shrink-0 shadow-sm">
             <CheckCircle2 className="w-3.5 h-3.5" />
             STEP 1
@@ -176,12 +176,12 @@ export default function SingleViewportDashboard(): React.ReactElement {
         </div>
 
         {/* 矢印 */}
-        <div className="hidden sm:flex items-center text-zinc-500 shrink-0 px-1">
+        <div className="hidden sm:flex items-center text-zinc-500 shrink-0">
           <ArrowRight className="w-4 h-4 text-sky-400 animate-pulse-arrow" />
         </div>
 
         {/* STEP 2 */}
-        <div className="flex items-center gap-3 w-full sm:w-auto">
+        <div className="flex items-center gap-3">
           <span className="px-2.5 py-1 rounded-lg bg-sky-500/15 border border-sky-500/30 text-sky-400 font-extrabold text-[11px] flex items-center gap-1.5 shrink-0 shadow-sm">
             <Terminal className="w-3.5 h-3.5" />
             STEP 2
