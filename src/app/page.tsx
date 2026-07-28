@@ -25,9 +25,31 @@ export default function SingleViewportDashboard(): React.ReactElement {
   const [isScriptModalOpen, setIsScriptModalOpen] = useState<boolean>(false);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
 
-  // キーキャプチャ＆誤押しガード処理
+  // リアルタイム・インタラクション状態
+  const [pressedKeyId, setPressedKeyId] = useState<LockKeyConfig['id'] | null>(null);
+  const [isBeepRippling, setIsBeepRippling] = useState<boolean>(false);
+
+  // キーキャプチャ＆誤押しガード＆リアルタイムバウンド処理
   useEffect((): (() => void) => {
+    const mapCodeToKeyId = (code: string): LockKeyConfig['id'] | null => {
+      if (code === 'NumLock') return 'NumLock';
+      if (code === 'CapsLock') return 'CapsLock';
+      if (code === 'ScrollLock') return 'ScrollLock';
+      if (code === 'Insert') return 'Insert';
+      if (code === 'MetaLeft' || code === 'MetaRight' || code === 'OSLeft' || code === 'OSRight') return 'WinKey';
+      if (code.startsWith('F') && !isNaN(Number(code.substring(1)))) return 'FnKey';
+      return null;
+    };
+
     const handleKeyDown = (e: KeyboardEvent): void => {
+      const targetKeyId = mapCodeToKeyId(e.code);
+      if (targetKeyId) {
+        setPressedKeyId(targetKeyId);
+        setTimeout((): void => {
+          setPressedKeyId(null);
+        }, 400);
+      }
+
       const evaluation = evaluateKeyPressGuard(e.code, lockMap);
       if (evaluation.alertMessage) {
         showToast(evaluation.alertMessage);
@@ -56,8 +78,13 @@ export default function SingleViewportDashboard(): React.ReactElement {
     }, 2500);
   };
 
-  // 短音ビープ再生
+  // 短音ビープ再生＆サウンド波紋トリガー
   const playBeepSound = (isBlocked: boolean): void => {
+    setIsBeepRippling(true);
+    setTimeout((): void => {
+      setIsBeepRippling(false);
+    }, 650);
+
     try {
       const AudioCtx = window.AudioContext || (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext;
       if (!AudioCtx) return;
@@ -165,12 +192,13 @@ export default function SingleViewportDashboard(): React.ReactElement {
         </div>
       </div>
 
-      {/* 中央エリア: 6個のキーカード */}
+      {/* 中央エリア: 6個のキーカード (リアルタイム押下リアクティブ) */}
       <main className="relative z-10 flex-1 py-2 sm:py-3 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5 items-stretch">
         {Object.values(lockMap).map((config) => (
           <LockCard
             key={config.id}
             config={config}
+            isPressed={pressedKeyId === config.id}
             onModeChange={handleModeChange}
             onToggleActive={handleToggleActive}
           />
@@ -181,13 +209,23 @@ export default function SingleViewportDashboard(): React.ReactElement {
       <footer className="relative z-10 pt-3 border-t border-white/10 flex flex-wrap items-center justify-between gap-3 text-xs">
         <div className="flex items-center gap-2">
           <button
-            onClick={(): void => setSoundEnabled(!soundEnabled)}
-            className={`px-3.5 py-2 rounded-xl border font-medium flex items-center gap-2 transition-all active:scale-95 ${
+            onClick={(): void => {
+              const nextState = !soundEnabled;
+              setSoundEnabled(nextState);
+              if (nextState) {
+                playBeepSound(false);
+              }
+            }}
+            className={`relative px-3.5 py-2 rounded-xl border font-medium flex items-center gap-2 transition-all active:scale-95 ${
               soundEnabled
                 ? 'bg-zinc-900/90 text-zinc-200 border-white/10 hover:border-white/20'
                 : 'bg-zinc-950 text-zinc-500 border-zinc-900'
             }`}
           >
+            {/* サウンド波紋アニメーションリング */}
+            {isBeepRippling && (
+              <span className="absolute inset-0 rounded-xl border-2 border-emerald-400 animate-sound-ripple pointer-events-none z-20" />
+            )}
             {soundEnabled ? <Volume2 className="w-4 h-4 text-emerald-400" /> : <VolumeX className="w-4 h-4" />}
             <span>{soundEnabled ? '音響通知: ON' : '音響通知: OFF'}</span>
           </button>

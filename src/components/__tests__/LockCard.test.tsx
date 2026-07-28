@@ -95,4 +95,17 @@ describe('LockCard Component', () => {
 
     expect(screen.getByText('状態: OFF')).toBeInTheDocument();
   });
+
+  test('applies pressed styles when isPressed is true', () => {
+    render(
+      <LockCard
+        config={mockConfig}
+        isPressed={true}
+        onModeChange={mockOnModeChange}
+        onToggleActive={mockOnToggleActive}
+      />
+    );
+
+    expect(screen.getByText('Num ⇚')).toHaveClass('scale-95');
+  });
 });
