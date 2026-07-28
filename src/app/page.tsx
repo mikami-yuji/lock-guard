@@ -99,8 +99,16 @@ export default function SingleViewportDashboard(): React.ReactElement {
 
   return (
     <div className="h-screen w-screen overflow-hidden flex flex-col justify-between p-4 sm:p-6 lg:p-8 ambient-bg text-zinc-100 selection:bg-zinc-100 selection:text-zinc-950 relative">
-      {/* 光彩スポットライト効果 */}
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[300px] bg-sky-500/5 rounded-full blur-[140px] pointer-events-none" />
+      {/* 超微細サイバーグリッド背景メッシュ */}
+      <div className="absolute inset-0 cyber-grid-bg pointer-events-none z-0" />
+
+      {/* シネマティック・ヴィネットオーバーレイ */}
+      <div className="absolute inset-0 luxury-vignette z-0" />
+
+      {/* 多層アンビエントオーラ・スポットライト */}
+      <div className="absolute -top-24 left-1/2 -translate-x-1/2 w-[900px] h-[350px] bg-gradient-to-b from-sky-500/10 via-indigo-500/5 to-transparent rounded-full blur-[140px] pointer-events-none z-0" />
+      <div className="absolute top-1/4 -left-32 w-[500px] h-[500px] bg-emerald-500/5 rounded-full blur-[160px] pointer-events-none z-0 animate-pulse-glow" />
+      <div className="absolute bottom-10 -right-32 w-[500px] h-[500px] bg-rose-500/5 rounded-full blur-[160px] pointer-events-none z-0 animate-pulse-glow" />
 
       {/* 上部ヘッダー & リアルタイムステータスバー */}
       <header className="relative z-10 flex flex-col sm:flex-row items-center justify-between gap-4 pb-3 border-b border-white/10">
