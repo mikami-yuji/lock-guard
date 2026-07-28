@@ -27,7 +27,7 @@ export const Navbar: React.FC = (): React.ReactElement => {
           </div>
           <div>
             <h1 className="text-xl font-bold bg-gradient-to-r from-sky-400 via-indigo-300 to-emerald-400 bg-clip-text text-transparent">
-              Lock Guard Panel
+              Lock Guard
             </h1>
             <p className="text-xs text-slate-400">キーボードLock誤操作防止 & ステータスコントローラー</p>
           </div>

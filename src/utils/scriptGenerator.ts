@@ -9,7 +9,7 @@ export const generateAutoHotkeyScript = (lockMap: LockStateMap): string => {
   try {
     const lines: string[] = [
       '; ===================================================',
-      '; Lock Guard Panel - AutoHotkey v2 Key Control Script',
+      '; Lock Guard - AutoHotkey v2 Key Control Script',
       '; 生成日: ' + new Date().toLocaleString('ja-JP'),
       '; このスクリプトは指定したLockキーの誤操作を制御します。',
       '; ===================================================',
@@ -113,7 +113,7 @@ export const generatePowerShellScript = (lockMap: LockStateMap): string => {
   try {
     const lines: string[] = [
       '# ===================================================',
-      '# Lock Guard Panel - PowerShell Key Control Script',
+      '# Lock Guard - PowerShell Key Control Script',
       '# ===================================================',
       'Write-Host "LockGuard: Setting up Windows Lock Key configurations..." -ForegroundColor Green',
       '',
@@ -151,7 +151,7 @@ export const generateRegistryScript = (lockMap: LockStateMap): string => {
     const lines: string[] = [
       'Windows Registry Editor Version 5.00',
       '',
-      '; Lock Guard Panel - Registry Key Mappings',
+      '; Lock Guard - Registry Key Mappings',
       '[HKEY_CURRENT_USER\\Control Panel\\Keyboard]',
     ];
 

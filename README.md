@@ -1,4 +1,4 @@
-# Lock Guard Panel (キーボードLock誤操作防止＆制御パネル)
+# Lock Guard (キーボードLock誤操作防止＆制御パネル)
 
 PC上のあらゆるLockキー（NumLock, CapsLock, ScrollLock, Insertキー, WinLockなど）の意図しない押下トラブルを未然に防止し、状態の監視・強制固定・OSレベル連携スクリプト生成を提供する Next.js App Router アプリケーションです。
 

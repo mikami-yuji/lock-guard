@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import './globals.css';
 
 export const metadata: Metadata = {
-  title: 'Lock Guard Panel - Space Black Edition',
+  title: 'Lock Guard',
   description: 'NumLock, CapsLock, ScrollLock, Insertキーの誤押下防止ミニマル制御パネル',
 };
 

@@ -12,7 +12,7 @@ describe('Navbar Component', () => {
   test('renders logo title and navigation links', () => {
     render(<Navbar />);
 
-    expect(screen.getByText('Lock Guard Panel')).toBeInTheDocument();
+    expect(screen.getByText('Lock Guard')).toBeInTheDocument();
     expect(screen.getByText('ダッシュボード')).toBeInTheDocument();
     expect(screen.getByText('プロファイル管理')).toBeInTheDocument();
     expect(screen.getByText('OS統合スクリプト')).toBeInTheDocument();

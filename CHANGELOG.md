@@ -2,8 +2,9 @@
 
 ## [1.0.0] - 2026-07-28
 
-### Added
-- 初期リリース: Lock機能操作・誤押し防止パネル (Lock Guard Panel)
+### Changed
+- プロジェクト名・リポジトリ名およびページタイトルを「Lock Guard」に統一（「Space Black Edition」等の補足表記を削除）
+- 初期リリース: Lock機能操作・誤押し防止パネル (Lock Guard)
 - NumLock / CapsLock / ScrollLock / Insert / WinLock の状態管理および擬似トグル機能
 - AutoHotkey v2 および PowerShell / Registry 用OS統合スクリプト生成モジュール
 - 設定プロファイル管理 (動的ルーティング `/profiles/[id]`)
