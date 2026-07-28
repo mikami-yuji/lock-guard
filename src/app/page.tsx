@@ -1,0 +1,207 @@
+'use client';
+
+import React, { useState, useEffect } from 'react';
+import { LockCard } from '@/components/LockCard';
+import { ScriptModal } from '@/components/ScriptModal';
+import { KeyboardStatusHeader } from '@/components/KeyboardStatusHeader';
+import {
+  createDefaultLockStateMap,
+  updateLockKeyMode,
+  toggleLockState,
+  evaluateKeyPressGuard,
+  getDefaultProfiles,
+} from '@/utils/lockManager';
+import { LockStateMap, LockMode, LockKeyConfig, UserProfile } from '@/types';
+import { Volume2, VolumeX, Terminal, Zap, ArrowRight, CheckCircle2 } from 'lucide-react';
+
+/**
+ * MacBook Pro Pro Max Ultra-Hardware Grade UI 1画面完結型ダッシュボード
+ */
+export default function SingleViewportDashboard(): React.ReactElement {
+  const [lockMap, setLockMap] = useState<LockStateMap>(createDefaultLockStateMap());
+  const [profiles] = useState<UserProfile[]>(getDefaultProfiles());
+  const [activeProfileId, setActiveProfileId] = useState<string>('default');
+  const [soundEnabled, setSoundEnabled] = useState<boolean>(true);
+  const [isScriptModalOpen, setIsScriptModalOpen] = useState<boolean>(false);
+  const [toastMessage, setToastMessage] = useState<string | null>(null);
+
+  // キーキャプチャ＆誤押しガード処理
+  useEffect((): (() => void) => {
+    const handleKeyDown = (e: KeyboardEvent): void => {
+      const evaluation = evaluateKeyPressGuard(e.code, lockMap);
+      if (evaluation.alertMessage) {
+        showToast(evaluation.alertMessage);
+
+        if (soundEnabled && evaluation.triggerSound) {
+          playBeepSound(evaluation.shouldBlock);
+        }
+
+        if (evaluation.shouldBlock) {
+          e.preventDefault();
+        }
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return (): void => {
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [lockMap, soundEnabled]);
+
+  // トースト表示
+  const showToast = (msg: string): void => {
+    setToastMessage(msg);
+    setTimeout((): void => {
+      setToastMessage(null);
+    }, 2500);
+  };
+
+  // 短音ビープ再生
+  const playBeepSound = (isBlocked: boolean): void => {
+    try {
+      const AudioCtx = window.AudioContext || (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext;
+      if (!AudioCtx) return;
+      const ctx = new AudioCtx();
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.type = isBlocked ? 'sawtooth' : 'sine';
+      osc.frequency.setValueAtTime(isBlocked ? 220 : 440, ctx.currentTime);
+      gain.gain.setValueAtTime(0.06, ctx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.2);
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      osc.start();
+      osc.stop(ctx.currentTime + 0.2);
+    } catch (e) {
+      // AudioContextエラー時無視
+    }
+  };
+
+  // モードの変更
+  const handleModeChange = (keyId: LockKeyConfig['id'], newMode: LockMode): void => {
+    const updated = updateLockKeyMode(lockMap, keyId, newMode);
+    setLockMap(updated);
+    showToast(`${keyId} の設定を変更しました。「PC適用スクリプトを出力」で保存してください。`);
+  };
+
+  // Active状態トグル
+  const handleToggleActive = (keyId: LockKeyConfig['id']): void => {
+    const updated = toggleLockState(lockMap, keyId);
+    setLockMap(updated);
+  };
+
+  // プリセット適用
+  const handleSelectProfile = (profile: UserProfile): void => {
+    setActiveProfileId(profile.id);
+    setLockMap({ ...profile.keyConfigs });
+    showToast(`プロファイル「${profile.name}」を選択しました。`);
+  };
+
+  return (
+    <div className="h-screen w-screen overflow-hidden flex flex-col justify-between p-4 sm:p-6 lg:p-8 ambient-bg text-zinc-100 selection:bg-zinc-100 selection:text-zinc-950 relative">
+      {/* 光彩スポットライト効果 */}
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[300px] bg-sky-500/5 rounded-full blur-[140px] pointer-events-none" />
+
+      {/* 上部ヘッダー & リアルタイムステータスバー */}
+      <header className="relative z-10 flex flex-col sm:flex-row items-center justify-between gap-4 pb-3 border-b border-white/10">
+        <KeyboardStatusHeader lockStateMap={lockMap} />
+
+        {/* プリセット切替セグメント */}
+        <div className="mac-segmented-track flex items-center gap-1">
+          {profiles.map((p) => {
+            const isActive = p.id === activeProfileId;
+            return (
+              <button
+                key={p.id}
+                onClick={(): void => handleSelectProfile(p)}
+                className={`px-3.5 py-1.5 rounded-lg text-xs transition-all active:scale-95 ${
+                  isActive
+                    ? 'mac-segmented-item-active font-bold'
+                    : 'text-zinc-400 hover:text-zinc-200 hover:bg-white/5 font-medium'
+                }`}
+              >
+                {p.name.replace('モード', '').replace('プロファイル', '')}
+              </button>
+            );
+          })}
+        </div>
+      </header>
+
+      {/* 2ステップ案内ガイドバー */}
+      <div className="relative z-10 my-2 px-4 py-2 rounded-xl bg-zinc-900/90 border border-white/10 text-xs flex flex-col sm:flex-row items-center justify-between gap-2 shadow-lg">
+        <div className="flex items-center gap-3">
+          <span className="flex items-center gap-1 font-bold text-zinc-300">
+            <CheckCircle2 className="w-4 h-4 text-emerald-400" />
+            STEP 1
+          </span>
+          <span className="text-zinc-400">キーごとの制御モード（標準 / ON固定 / 遮断）を選択</span>
+        </div>
+        <div className="hidden sm:flex items-center text-zinc-600">
+          <ArrowRight className="w-4 h-4" />
+        </div>
+        <div className="flex items-center gap-2">
+          <span className="flex items-center gap-1 font-bold text-zinc-100">
+            <Terminal className="w-4 h-4 text-zinc-200" />
+            STEP 2
+          </span>
+          <span className="text-zinc-300 font-medium">右下の【PC適用スクリプトを出力】ボタンで実行</span>
+        </div>
+      </div>
+
+      {/* 中央エリア: 6個のキーカード */}
+      <main className="relative z-10 flex-1 py-2 sm:py-3 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5 items-stretch">
+        {Object.values(lockMap).map((config) => (
+          <LockCard
+            key={config.id}
+            config={config}
+            onModeChange={handleModeChange}
+            onToggleActive={handleToggleActive}
+          />
+        ))}
+      </main>
+
+      {/* 下部ツールバー */}
+      <footer className="relative z-10 pt-3 border-t border-white/10 flex flex-wrap items-center justify-between gap-3 text-xs">
+        <div className="flex items-center gap-2">
+          <button
+            onClick={(): void => setSoundEnabled(!soundEnabled)}
+            className={`px-3.5 py-2 rounded-xl border font-medium flex items-center gap-2 transition-all active:scale-95 ${
+              soundEnabled
+                ? 'bg-zinc-900/90 text-zinc-200 border-white/10 hover:border-white/20'
+                : 'bg-zinc-950 text-zinc-500 border-zinc-900'
+            }`}
+          >
+            {soundEnabled ? <Volume2 className="w-4 h-4 text-emerald-400" /> : <VolumeX className="w-4 h-4" />}
+            <span>{soundEnabled ? '音響通知: ON' : '音響通知: OFF'}</span>
+          </button>
+        </div>
+
+        {/* MacBook Space Black スタイルのメタルボタン */}
+        <div className="flex items-center gap-3">
+          <button
+            onClick={(): void => setIsScriptModalOpen(true)}
+            className="px-5 py-2.5 rounded-xl bg-gradient-to-b from-[#2a2a32] via-[#202026] to-[#16161c] hover:from-[#32323c] hover:to-[#1e1e24] text-zinc-100 border border-white/15 font-bold shadow-xl flex items-center gap-2 transition-all active:scale-95"
+          >
+            <Terminal className="w-4 h-4 text-zinc-300" />
+            <span>PC適用スクリプトを出力 (STEP 2)</span>
+          </button>
+        </div>
+      </footer>
+
+      {/* トースト表示 */}
+      {toastMessage && (
+        <div className="fixed bottom-16 left-1/2 -translate-x-1/2 z-50 px-4.5 py-2.5 rounded-2xl bg-zinc-900/95 backdrop-blur-md border border-white/20 text-zinc-100 text-xs font-semibold shadow-2xl flex items-center gap-2.5">
+          <Zap className="w-4 h-4 text-emerald-400" />
+          <span>{toastMessage}</span>
+        </div>
+      )}
+
+      {/* AHKスクリプト生成モーダル */}
+      <ScriptModal
+        isOpen={isScriptModalOpen}
+        onClose={(): void => setIsScriptModalOpen(false)}
+        lockStateMap={lockMap}
+      />
+    </div>
+  );
+}
