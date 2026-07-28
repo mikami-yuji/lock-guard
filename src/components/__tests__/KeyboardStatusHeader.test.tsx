@@ -11,6 +11,5 @@ describe('KeyboardStatusHeader Component', () => {
     render(<KeyboardStatusHeader lockStateMap={lockMap} />);
 
     expect(screen.getByText('LOCK GUARD')).toBeInTheDocument();
-    expect(screen.getByText('Pro Max')).toBeInTheDocument();
   });
 });

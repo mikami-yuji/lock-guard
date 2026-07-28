@@ -15,7 +15,7 @@ import { LockStateMap, LockMode, LockKeyConfig, UserProfile } from '@/types';
 import { Volume2, VolumeX, Terminal, Zap, ArrowRight, CheckCircle2 } from 'lucide-react';
 
 /**
- * MacBook Pro Pro Max Ultra-Hardware Grade UI 1画面完結型ダッシュボード
+ * Lock Guard ダッシュボード (1画面完結型)
  */
 export default function SingleViewportDashboard(): React.ReactElement {
   const [lockMap, setLockMap] = useState<LockStateMap>(createDefaultLockStateMap());

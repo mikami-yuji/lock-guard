@@ -28,9 +28,6 @@ export const KeyboardStatusHeader: React.FC<KeyboardStatusHeaderProps> = ({
             <h1 className="text-sm sm:text-base font-extrabold tracking-tight text-zinc-100">
               LOCK GUARD
             </h1>
-            <span className="text-[9px] font-bold tracking-widest px-1.5 py-0.5 rounded bg-zinc-800 text-zinc-400 border border-white/10 uppercase">
-              Pro Max
-            </span>
           </div>
         </div>
       </div>
