@@ -128,23 +128,32 @@ export default function SingleViewportDashboard(): React.ReactElement {
       </header>
 
       {/* 2ステップ案内ガイドバー */}
-      <div className="relative z-10 my-2 px-4 py-2 rounded-xl bg-zinc-900/90 border border-white/10 text-xs flex flex-col sm:flex-row items-center justify-between gap-2 shadow-lg">
-        <div className="flex items-center gap-3">
-          <span className="flex items-center gap-1 font-bold text-zinc-300">
-            <CheckCircle2 className="w-4 h-4 text-emerald-400" />
+      <div className="relative z-10 my-2 px-4 py-2.5 rounded-2xl bg-gradient-to-r from-zinc-900/95 via-zinc-900/90 to-zinc-900/95 border border-white/15 text-xs flex flex-col sm:flex-row items-center justify-between gap-3 shadow-xl backdrop-blur-md">
+        {/* STEP 1 */}
+        <div className="flex items-center gap-3 w-full sm:w-auto">
+          <span className="px-2.5 py-1 rounded-lg bg-emerald-500/15 border border-emerald-500/30 text-emerald-400 font-extrabold text-[11px] flex items-center gap-1.5 shrink-0 shadow-sm">
+            <CheckCircle2 className="w-3.5 h-3.5" />
             STEP 1
           </span>
-          <span className="text-zinc-400">キーごとの制御モード（標準 / ON固定 / 遮断）を選択</span>
+          <span className="text-zinc-200 font-medium">
+            各キーの制御モード（<span className="text-emerald-400 font-bold">標準</span> / <span className="text-amber-400 font-bold">ON固定</span> / <span className="text-rose-400 font-bold">誤押しブロック</span>）を選択
+          </span>
         </div>
-        <div className="hidden sm:flex items-center text-zinc-600">
-          <ArrowRight className="w-4 h-4" />
+
+        {/* 矢印 */}
+        <div className="hidden sm:flex items-center text-zinc-500 shrink-0 px-1">
+          <ArrowRight className="w-4 h-4 text-zinc-400" />
         </div>
-        <div className="flex items-center gap-2">
-          <span className="flex items-center gap-1 font-bold text-zinc-100">
-            <Terminal className="w-4 h-4 text-zinc-200" />
+
+        {/* STEP 2 */}
+        <div className="flex items-center gap-3 w-full sm:w-auto">
+          <span className="px-2.5 py-1 rounded-lg bg-sky-500/15 border border-sky-500/30 text-sky-400 font-extrabold text-[11px] flex items-center gap-1.5 shrink-0 shadow-sm">
+            <Terminal className="w-3.5 h-3.5" />
             STEP 2
           </span>
-          <span className="text-zinc-300 font-medium">右下の【PC適用スクリプトを出力】ボタンで実行</span>
+          <span className="text-zinc-200 font-medium">
+            右下の <span className="text-sky-200 font-bold bg-white/10 px-1.5 py-0.5 rounded border border-white/15">【PC適用スクリプトを出力】</span> ボタンを押してWindowsに適用
+          </span>
         </div>
       </div>
 
