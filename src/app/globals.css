@@ -63,6 +63,55 @@ body {
   transform: translateY(-2px);
 }
 
+/* 制御モードに応じたカードのダイナミックネオンアクセント */
+.ultra-card-blocked {
+  border-left: 3px solid #f43f5e;
+  background: linear-gradient(145deg, rgba(35, 18, 24, 0.8) 0%, rgba(14, 14, 17, 0.9) 100%);
+  box-shadow: 
+    0 20px 40px -15px rgba(244, 63, 94, 0.15),
+    inset 0 1px 0 rgba(244, 63, 94, 0.2);
+}
+
+.ultra-card-blocked:hover {
+  border-color: rgba(244, 63, 94, 0.4);
+  border-left-color: #fb7185;
+  box-shadow: 
+    0 25px 50px -12px rgba(244, 63, 94, 0.25),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+.ultra-card-force-on {
+  border-left: 3px solid #10b981;
+  background: linear-gradient(145deg, rgba(16, 32, 26, 0.8) 0%, rgba(14, 14, 17, 0.9) 100%);
+  box-shadow: 
+    0 20px 40px -15px rgba(16, 185, 129, 0.15),
+    inset 0 1px 0 rgba(16, 185, 129, 0.2);
+}
+
+.ultra-card-force-on:hover {
+  border-color: rgba(16, 185, 129, 0.4);
+  border-left-color: #34d399;
+  box-shadow: 
+    0 25px 50px -12px rgba(16, 185, 129, 0.25),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+.ultra-card-force-off {
+  border-left: 3px solid #f59e0b;
+  background: linear-gradient(145deg, rgba(32, 26, 16, 0.8) 0%, rgba(14, 14, 17, 0.9) 100%);
+  box-shadow: 
+    0 20px 40px -15px rgba(245, 158, 11, 0.15),
+    inset 0 1px 0 rgba(245, 158, 11, 0.2);
+}
+
+.ultra-card-force-off:hover {
+  border-color: rgba(245, 158, 11, 0.4);
+  border-left-color: #fbbf24;
+  box-shadow: 
+    0 25px 50px -12px rgba(245, 158, 11, 0.25),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
 /* macOS Control Center セグメントスライダー */
 .mac-segmented-track {
   background: #0b0b0e;
@@ -82,21 +131,49 @@ body {
 }
 
 .mac-segmented-item-blocked {
-  background: linear-gradient(180deg, rgba(244, 63, 94, 0.25) 0%, rgba(159, 18, 57, 0.4) 100%);
-  border: 1px solid rgba(244, 63, 94, 0.5);
+  background: linear-gradient(180deg, rgba(244, 63, 94, 0.3) 0%, rgba(159, 18, 57, 0.45) 100%);
+  border: 1px solid rgba(244, 63, 94, 0.6);
   box-shadow: 
-    0 2px 10px rgba(244, 63, 94, 0.3),
+    0 2px 10px rgba(244, 63, 94, 0.35),
     inset 0 1px 0 rgba(255, 255, 255, 0.25);
   color: #ffe4e6;
 }
 
 .mac-segmented-item-force-on {
-  background: linear-gradient(180deg, rgba(16, 185, 129, 0.22) 0%, rgba(6, 95, 70, 0.35) 100%);
-  border: 1px solid rgba(52, 211, 153, 0.45);
+  background: linear-gradient(180deg, rgba(16, 185, 129, 0.28) 0%, rgba(6, 95, 70, 0.4) 100%);
+  border: 1px solid rgba(52, 211, 153, 0.55);
   box-shadow: 
-    0 2px 10px rgba(16, 185, 129, 0.25),
+    0 2px 10px rgba(16, 185, 129, 0.3),
     inset 0 1px 0 rgba(255, 255, 255, 0.2);
   color: #d1fae5;
+}
+
+.mac-segmented-item-force-off {
+  background: linear-gradient(180deg, rgba(245, 158, 11, 0.28) 0%, rgba(146, 64, 14, 0.4) 100%);
+  border: 1px solid rgba(251, 191, 36, 0.55);
+  box-shadow: 
+    0 2px 10px rgba(245, 158, 11, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  color: #fef3c7;
+}
+
+/* プライマリCTA（PC適用スクリプトを出力）発光スタイル */
+.cta-script-btn {
+  background: linear-gradient(180deg, #2a2a36 0%, #1a1a22 100%);
+  border: 1px solid rgba(56, 189, 248, 0.4);
+  box-shadow: 
+    0 4px 20px rgba(14, 165, 233, 0.25),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.cta-script-btn:hover {
+  background: linear-gradient(180deg, #323242 0%, #20202c 100%);
+  border-color: rgba(56, 189, 248, 0.7);
+  box-shadow: 
+    0 6px 24px rgba(14, 165, 233, 0.4),
+    inset 0 1px 0 rgba(255, 255, 255, 0.3);
+  transform: translateY(-1px);
 }
 
 /* LEDリング発光効果 */
@@ -128,6 +205,16 @@ body {
   50% { opacity: 1; transform: scale(1.05); }
 }
 
+@keyframes pulseArrow {
+  0%, 100% { transform: translateX(0); opacity: 0.6; }
+  50% { transform: translateX(4px); opacity: 1; }
+}
+
 .animate-pulse-glow {
   animation: pulseGlow 2s infinite ease-in-out;
 }
+
+.animate-pulse-arrow {
+  animation: pulseArrow 1.5s infinite ease-in-out;
+}
+

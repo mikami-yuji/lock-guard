@@ -142,7 +142,7 @@ export default function SingleViewportDashboard(): React.ReactElement {
 
         {/* 矢印 */}
         <div className="hidden sm:flex items-center text-zinc-500 shrink-0 px-1">
-          <ArrowRight className="w-4 h-4 text-zinc-400" />
+          <ArrowRight className="w-4 h-4 text-sky-400 animate-pulse-arrow" />
         </div>
 
         {/* STEP 2 */}
@@ -185,13 +185,13 @@ export default function SingleViewportDashboard(): React.ReactElement {
           </button>
         </div>
 
-        {/* MacBook Space Black スタイルのメタルボタン */}
+        {/* MacBook Space Black スタイルのメタルCTAボタン */}
         <div className="flex items-center gap-3">
           <button
             onClick={(): void => setIsScriptModalOpen(true)}
-            className="px-5 py-2.5 rounded-xl bg-gradient-to-b from-[#2a2a32] via-[#202026] to-[#16161c] hover:from-[#32323c] hover:to-[#1e1e24] text-zinc-100 border border-white/15 font-bold shadow-xl flex items-center gap-2 transition-all active:scale-95"
+            className="cta-script-btn px-5 py-2.5 rounded-xl text-zinc-100 font-bold shadow-xl flex items-center gap-2 transition-all active:scale-95"
           >
-            <Terminal className="w-4 h-4 text-zinc-300" />
+            <Terminal className="w-4 h-4 text-sky-400" />
             <span>PC適用スクリプトを出力 (STEP 2)</span>
           </button>
         </div>

@@ -77,8 +77,16 @@ export const LockCard: React.FC<LockCardProps> = ({
     }
   };
 
+  // モード別カードアクセントクラス
+  const getCardModeClass = (): string => {
+    if (config.mode === 'blocked') return 'ultra-card-blocked';
+    if (config.mode === 'force_on') return 'ultra-card-force-on';
+    if (config.mode === 'force_off') return 'ultra-card-force-off';
+    return '';
+  };
+
   return (
-    <div className="ultra-card rounded-2xl p-4 sm:p-5 flex flex-col justify-between h-full relative overflow-hidden group">
+    <div className={`ultra-card ${getCardModeClass()} rounded-2xl p-4 sm:p-5 flex flex-col justify-between h-full relative overflow-hidden group`}>
       {/* 繊細なメタルリフレクションハイライト */}
       <div className="absolute -inset-px bg-gradient-to-r from-white/0 via-white/10 to-white/0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none" />
 
@@ -123,6 +131,7 @@ export const LockCard: React.FC<LockCardProps> = ({
           if (isSelected) {
             if (mode === 'blocked') activeStyleClass = 'mac-segmented-item-blocked font-bold';
             else if (mode === 'force_on') activeStyleClass = 'mac-segmented-item-force-on font-bold';
+            else if (mode === 'force_off') activeStyleClass = 'mac-segmented-item-force-off font-bold';
           }
 
           return (

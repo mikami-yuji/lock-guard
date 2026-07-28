@@ -62,4 +62,37 @@ describe('LockCard Component', () => {
 
     expect(screen.getByText('完全遮断')).toBeInTheDocument();
   });
+
+  test('renders force_off and normal modes correctly', () => {
+    const forceOffConfig: LockKeyConfig = {
+      ...mockConfig,
+      mode: 'force_off',
+    };
+
+    const { rerender } = render(
+      <LockCard
+        config={forceOffConfig}
+        onModeChange={mockOnModeChange}
+        onToggleActive={mockOnToggleActive}
+      />
+    );
+
+    expect(screen.getAllByText('OFF固定').length).toBeGreaterThan(0);
+
+    const normalConfig: LockKeyConfig = {
+      ...mockConfig,
+      mode: 'normal',
+      isCurrentlyActive: false,
+    };
+
+    rerender(
+      <LockCard
+        config={normalConfig}
+        onModeChange={mockOnModeChange}
+        onToggleActive={mockOnToggleActive}
+      />
+    );
+
+    expect(screen.getByText('状態: OFF')).toBeInTheDocument();
+  });
 });

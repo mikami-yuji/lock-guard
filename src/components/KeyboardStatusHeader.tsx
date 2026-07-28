@@ -38,9 +38,9 @@ export const KeyboardStatusHeader: React.FC<KeyboardStatusHeaderProps> = ({
         {keys.map((k) => {
           let badgeClass = 'bg-zinc-850 text-zinc-500 border-zinc-800';
           if (k.mode === 'blocked') {
-            badgeClass = 'bg-rose-500/20 text-rose-300 border-rose-500/30 animate-pulse';
+            badgeClass = 'bg-rose-500/20 text-rose-300 border-rose-500/40 shadow-[0_0_8px_rgba(244,63,94,0.4)] animate-pulse';
           } else if (k.isCurrentlyActive) {
-            badgeClass = 'bg-emerald-500/20 text-emerald-300 border-emerald-500/30';
+            badgeClass = 'bg-emerald-500/20 text-emerald-300 border-emerald-500/40 shadow-[0_0_8px_rgba(16,185,129,0.3)]';
           }
 
           return (
@@ -52,9 +52,9 @@ export const KeyboardStatusHeader: React.FC<KeyboardStatusHeaderProps> = ({
               <span
                 className={`w-1.5 h-1.5 rounded-full ${
                   k.mode === 'blocked'
-                    ? 'bg-rose-400'
+                    ? 'bg-rose-400 shadow-[0_0_4px_#fb7185]'
                     : k.isCurrentlyActive
-                    ? 'bg-emerald-400'
+                    ? 'bg-emerald-400 shadow-[0_0_4px_#34d399]'
                     : 'bg-zinc-600'
                 }`}
               />
