@@ -171,7 +171,7 @@ export default function SingleViewportDashboard(): React.ReactElement {
             STEP 1
           </span>
           <span className="text-zinc-200 font-medium">
-            各キーの制御モード（<span className="text-emerald-400 font-bold">標準</span> / <span className="text-amber-400 font-bold">ON固定</span> / <span className="text-rose-400 font-bold">誤押しブロック</span>）を選択
+            各キーの制御モード（<span className="text-zinc-300 font-bold">標準</span> / <span className="text-emerald-400 font-bold">ON固定</span> / <span className="text-amber-400 font-bold">OFF固定</span> / <span className="text-rose-400 font-bold">遮断</span>）を選択
           </span>
         </div>
 
