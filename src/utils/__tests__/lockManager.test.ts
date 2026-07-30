@@ -70,7 +70,7 @@ describe('lockManager utility tests', () => {
     const forceOffState = updateLockKeyMode(defaultStateMap, 'WinKey', 'force_off');
     const resultMetaLeft = evaluateKeyPressGuard('MetaLeft', forceOffState);
     expect(resultMetaLeft.shouldBlock).toBe(true);
-    expect(resultMetaLeft.alertMessage).toContain('常時OFFに固定されています');
+    expect(resultMetaLeft.alertMessage).toContain('PC適用スクリプトを出力');
 
     const resultOSLeft = evaluateKeyPressGuard('OSLeft', forceOffState);
     expect(resultOSLeft.shouldBlock).toBe(true);
@@ -78,7 +78,7 @@ describe('lockManager utility tests', () => {
     const blockedState = updateLockKeyMode(defaultStateMap, 'WinKey', 'blocked');
     const resultOSRight = evaluateKeyPressGuard('OSRight', blockedState);
     expect(resultOSRight.shouldBlock).toBe(true);
-    expect(resultOSRight.alertMessage).toContain('無効化されています');
+    expect(resultOSRight.alertMessage).toContain('PC適用スクリプトを出力');
   });
 
   test('evaluateKeyPressGuard should evaluate force_on for keys', () => {

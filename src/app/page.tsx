@@ -29,6 +29,23 @@ export default function SingleViewportDashboard(): React.ReactElement {
   const [pressedKeyId, setPressedKeyId] = useState<LockKeyConfig['id'] | null>(null);
   const [isBeepRippling, setIsBeepRippling] = useState<boolean>(false);
 
+  // Keyboard Lock API (Chromium系ブラウザ向けWindowsキーキャプチャ試行)
+  useEffect((): void => {
+    try {
+      const winMode = lockMap.WinKey?.mode;
+      const navKeyboard = (navigator as unknown as { keyboard?: { lock?: (keys: string[]) => Promise<void>; unlock?: () => void } }).keyboard;
+      if (navKeyboard) {
+        if (winMode === 'blocked' || winMode === 'force_off') {
+          navKeyboard.lock?.(['MetaLeft', 'MetaRight']).catch((): void => {});
+        } else {
+          navKeyboard.unlock?.();
+        }
+      }
+    } catch (e) {
+      // 未サポート環境無視
+    }
+  }, [lockMap.WinKey?.mode]);
+
   // キーキャプチャ＆誤押しガード＆リアルタイムバウンド処理
   useEffect((): (() => void) => {
     const mapCodeToKeyId = (code: string): LockKeyConfig['id'] | null => {

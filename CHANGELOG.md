@@ -7,6 +7,8 @@
 - 物理キーボード押下時のガード判定（`evaluateKeyPressGuard`）において、`force_off` モードおよび `blocked` モード時に無条件でキーイベントを抑止（`shouldBlock: true`）し、Windowsスタートメニュー等の意図しない起動を防ぐよう修正
 - キーボードイベントマッピングに `OSLeft` / `OSRight` を追加し、多様な環境のWindowsキー押下判定に対応
 - AutoHotkeyスクリプト生成モジュールにおいて、WindowsキーおよびInsertキーの `force_off` モード時の無効化スクリプト出力を追加
+- Chromium系ブラウザ向け Web Keyboard Lock API (`navigator.keyboard.lock`) 試行フックを組み込み
+- Windowsキーが遮断/OFF固定の際に「OSレベルのスタートメニュー抑止には STEP 2 の【PC適用スクリプトを出力】実行が必要である」旨のバナー表示および通知案内を強化
 
 ## [1.0.0] - 2026-07-28
 

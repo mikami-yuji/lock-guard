@@ -172,9 +172,14 @@ export const evaluateKeyPressGuard = (
   const config = currentMap[matchedLockKey];
 
   if (config.mode === 'blocked') {
+    const isWinKey = config.id === 'WinKey';
+    const alertMessage = isWinKey
+      ? `【誤押しブロック】Windowsキーをブロック中。OS自体のスタートメニュー遮断には STEP2 の【PC適用スクリプトを出力】をご使用ください。`
+      : `【誤押しブロック】${config.name} はロック無効化されています。`;
+
     return {
       shouldBlock: true,
-      alertMessage: `【誤押しブロック】${config.name} はロック無効化されています。`,
+      alertMessage,
       triggerSound: config.soundAlertEnabled,
     };
   }
@@ -188,9 +193,14 @@ export const evaluateKeyPressGuard = (
   }
 
   if (config.mode === 'force_off') {
+    const isWinKey = config.id === 'WinKey';
+    const alertMessage = isWinKey
+      ? `【状態維持】WindowsキーはOFF固定中。OS自体のスタートメニュー遮断には STEP2 の【PC適用スクリプトを出力】をご使用ください。`
+      : `【状態維持】${config.name} は常時OFFに固定されています。`;
+
     return {
       shouldBlock: true,
-      alertMessage: `【状態維持】${config.name} は常時OFFに固定されています。`,
+      alertMessage,
       triggerSound: config.soundAlertEnabled,
     };
   }

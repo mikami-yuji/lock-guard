@@ -139,37 +139,47 @@ export const LockCard: React.FC<LockCardProps> = ({
       </div>
 
       {/* macOS Control Center セグメントスライダー */}
-      <div className="mac-segmented-track grid grid-cols-4 gap-1">
-        {(['normal', 'force_on', 'force_off', 'blocked'] as LockMode[]).map((mode) => {
-          const isSelected = config.mode === mode;
-          const labels: Record<LockMode, string> = {
-            normal: '標準',
-            force_on: 'ON固定',
-            force_off: 'OFF固定',
-            blocked: '遮断',
-          };
+      <div>
+        <div className="mac-segmented-track grid grid-cols-4 gap-1">
+          {(['normal', 'force_on', 'force_off', 'blocked'] as LockMode[]).map((mode) => {
+            const isSelected = config.mode === mode;
+            const labels: Record<LockMode, string> = {
+              normal: '標準',
+              force_on: 'ON固定',
+              force_off: 'OFF固定',
+              blocked: '遮断',
+            };
 
-          let activeStyleClass = 'mac-segmented-item-active font-semibold';
-          if (isSelected) {
-            if (mode === 'blocked') activeStyleClass = 'mac-segmented-item-blocked font-bold';
-            else if (mode === 'force_on') activeStyleClass = 'mac-segmented-item-force-on font-bold';
-            else if (mode === 'force_off') activeStyleClass = 'mac-segmented-item-force-off font-bold';
-          }
+            let activeStyleClass = 'mac-segmented-item-active font-semibold';
+            if (isSelected) {
+              if (mode === 'blocked') activeStyleClass = 'mac-segmented-item-blocked font-bold';
+              else if (mode === 'force_on') activeStyleClass = 'mac-segmented-item-force-on font-bold';
+              else if (mode === 'force_off') activeStyleClass = 'mac-segmented-item-force-off font-bold';
+            }
 
-          return (
-            <button
-              key={mode}
-              onClick={(): void => onModeChange(config.id, mode)}
-              className={`py-2 text-[11px] sm:text-xs rounded-lg transition-all duration-150 active:scale-95 flex items-center justify-center font-medium ${
-                isSelected
-                  ? activeStyleClass
-                  : 'text-zinc-400 hover:text-zinc-200 hover:bg-white/5'
-              }`}
-            >
-              {labels[mode]}
-            </button>
-          );
-        })}
+            return (
+              <button
+                key={mode}
+                onClick={(): void => onModeChange(config.id, mode)}
+                className={`py-2 text-[11px] sm:text-xs rounded-lg transition-all duration-150 active:scale-95 flex items-center justify-center font-medium ${
+                  isSelected
+                    ? activeStyleClass
+                    : 'text-zinc-400 hover:text-zinc-200 hover:bg-white/5'
+                }`}
+              >
+                {labels[mode]}
+              </button>
+            );
+          })}
+        </div>
+
+        {/* Windowsキー制限時のOS適用案内バナー */}
+        {config.id === 'WinKey' && (config.mode === 'blocked' || config.mode === 'force_off') && (
+          <div className="mt-2.5 px-3 py-1.5 rounded-lg bg-sky-500/10 border border-sky-500/25 text-[10px] text-sky-300 font-medium leading-tight flex items-center gap-1.5">
+            <span>💡</span>
+            <span>OS自体のスタートメニュー抑止には【PC適用スクリプトを出力 (STEP 2)】の実行が必要です</span>
+          </div>
+        )}
       </div>
     </div>
   );
