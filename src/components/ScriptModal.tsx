@@ -153,7 +153,7 @@ export const ScriptModal: React.FC<ScriptModalProps> = ({
                 className="px-4.5 py-2 rounded-xl bg-gradient-to-b from-[#2a2a32] via-[#202026] to-[#16161c] hover:from-[#32323c] text-zinc-100 border border-white/15 text-xs font-bold flex items-center gap-1.5 transition-transform active:scale-95 shadow-md"
               >
                 <Download className="w-4 h-4 text-zinc-300" />
-                保存 (.ahk)
+                保存 (.{format === 'autohotkey' ? 'ahk' : format === 'powershell' ? 'ps1' : 'reg'})
               </button>
             </div>
           </>

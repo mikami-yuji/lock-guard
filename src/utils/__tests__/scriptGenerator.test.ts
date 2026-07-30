@@ -24,16 +24,20 @@ describe('scriptGenerator tests with full branch coverage', () => {
     expect(script1).toContain('LWin::Return');
     expect(script1).toContain('*Insert::Return');
 
-    // 次に CapsLock: force_off, NumLock: force_off, ScrollLock: force_off, ScrollLock: blocked
+    // 次に CapsLock: force_off, NumLock: force_off, ScrollLock: force_off, ScrollLock: blocked, WinKey: force_off, Insert: force_off
     let map2 = { ...defaultLockMap };
     map2 = updateLockKeyMode(map2, 'CapsLock', 'force_off');
     map2 = updateLockKeyMode(map2, 'NumLock', 'force_off');
     map2 = updateLockKeyMode(map2, 'ScrollLock', 'force_off');
+    map2 = updateLockKeyMode(map2, 'WinKey', 'force_off');
+    map2 = updateLockKeyMode(map2, 'Insert', 'force_off');
 
     const script2 = generateAutoHotkeyScript(map2);
     expect(script2).toContain('SetCapsLockState "AlwaysOff"');
     expect(script2).toContain('SetNumLockState "AlwaysOff"');
     expect(script2).toContain('SetScrollLockState "AlwaysOff"');
+    expect(script2).toContain('LWin::Return');
+    expect(script2).toContain('*Insert::Return');
 
     let map3 = { ...defaultLockMap };
     map3 = updateLockKeyMode(map3, 'ScrollLock', 'blocked');

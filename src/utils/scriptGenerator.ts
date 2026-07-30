@@ -83,18 +83,20 @@ export const generateAutoHotkeyScript = (lockMap: LockStateMap): string => {
 
     // Insertキーの制御
     const insertConfig = lockMap.Insert;
-    if (insertConfig && insertConfig.mode === 'blocked') {
-      lines.push('; Insertキー（上書きモード切替）を完全無効化');
+    if (insertConfig && (insertConfig.mode === 'blocked' || insertConfig.mode === 'force_off')) {
+      lines.push('; Insertキー（上書きモード切替）を無効化');
       lines.push('*Insert::Return');
       lines.push('');
     }
 
     // Windowsキーの制御
     const winConfig = lockMap.WinKey;
-    if (winConfig && winConfig.mode === 'blocked') {
+    if (winConfig && (winConfig.mode === 'blocked' || winConfig.mode === 'force_off')) {
       lines.push('; Windowsキー（WinLock）を無効化');
       lines.push('LWin::Return');
       lines.push('RWin::Return');
+      lines.push('*LWin::Return');
+      lines.push('*RWin::Return');
       lines.push('');
     }
 

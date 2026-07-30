@@ -1,5 +1,13 @@
 # CHANGELOG
 
+## [1.0.1] - 2026-07-30
+
+### Fixed
+- Windowsキー（WinLock）および各Lockキーの「OFF固定」「遮断」モード切り替え時に `isCurrentlyActive` 状態が連動して消灯/無効化状態になるよう修正
+- 物理キーボード押下時のガード判定（`evaluateKeyPressGuard`）において、`force_off` モードおよび `blocked` モード時に無条件でキーイベントを抑止（`shouldBlock: true`）し、Windowsスタートメニュー等の意図しない起動を防ぐよう修正
+- キーボードイベントマッピングに `OSLeft` / `OSRight` を追加し、多様な環境のWindowsキー押下判定に対応
+- AutoHotkeyスクリプト生成モジュールにおいて、WindowsキーおよびInsertキーの `force_off` モード時の無効化スクリプト出力を追加
+
 ## [1.0.0] - 2026-07-28
 
 ### Changed

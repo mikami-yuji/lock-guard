@@ -81,11 +81,20 @@ export const updateLockKeyMode = (
       return { ...currentMap };
     }
 
+    // モード切り替え時にisCurrentlyActive状態を同期設定
+    let nextActiveState = existingConfig.isCurrentlyActive;
+    if (newMode === 'force_on') {
+      nextActiveState = true;
+    } else if (newMode === 'force_off' || newMode === 'blocked') {
+      nextActiveState = false;
+    }
+
     return {
       ...currentMap,
       [targetKey]: {
         ...existingConfig,
         mode: newMode,
+        isCurrentlyActive: nextActiveState,
       },
     };
   } catch (error) {
@@ -146,6 +155,8 @@ export const evaluateKeyPressGuard = (
     Insert: 'Insert',
     MetaLeft: 'WinKey',
     MetaRight: 'WinKey',
+    OSLeft: 'WinKey',
+    OSRight: 'WinKey',
   };
 
   const matchedLockKey = normalizedKeyMap[keyCode];
@@ -168,7 +179,7 @@ export const evaluateKeyPressGuard = (
     };
   }
 
-  if (config.mode === 'force_on' && !config.isCurrentlyActive) {
+  if (config.mode === 'force_on') {
     return {
       shouldBlock: true,
       alertMessage: `【状態維持】${config.name} は常時ONに固定されています。`,
@@ -176,7 +187,7 @@ export const evaluateKeyPressGuard = (
     };
   }
 
-  if (config.mode === 'force_off' && config.isCurrentlyActive) {
+  if (config.mode === 'force_off') {
     return {
       shouldBlock: true,
       alertMessage: `【状態維持】${config.name} は常時OFFに固定されています。`,
@@ -202,6 +213,7 @@ export const getDefaultProfiles = (): UserProfile[] => {
   // 2. ゲーミング (Windowsキーを完全遮断、ScrollLockは標準)
   const gamingState: LockStateMap = JSON.parse(JSON.stringify(defaultState));
   gamingState.WinKey.mode = 'blocked';
+  gamingState.WinKey.isCurrentlyActive = false;
   gamingState.WinKey.preventAccidentalPress = true;
   gamingState.ScrollLock.mode = 'normal';
 

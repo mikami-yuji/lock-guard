@@ -23,10 +23,18 @@ describe('lockManager utility tests', () => {
     expect(defaultStateMap.WinKey.mode).toBe('normal');
   });
 
-  test('updateLockKeyMode should update specified lock key mode', () => {
-    const updated = updateLockKeyMode(defaultStateMap, 'NumLock', 'blocked');
-    expect(updated.NumLock.mode).toBe('blocked');
-    expect(updated.CapsLock.mode).toBe('blocked');
+  test('updateLockKeyMode should update specified lock key mode and sync active state', () => {
+    const updatedBlocked = updateLockKeyMode(defaultStateMap, 'NumLock', 'blocked');
+    expect(updatedBlocked.NumLock.mode).toBe('blocked');
+    expect(updatedBlocked.NumLock.isCurrentlyActive).toBe(false);
+
+    const updatedForceOff = updateLockKeyMode(defaultStateMap, 'WinKey', 'force_off');
+    expect(updatedForceOff.WinKey.mode).toBe('force_off');
+    expect(updatedForceOff.WinKey.isCurrentlyActive).toBe(false);
+
+    const updatedForceOn = updateLockKeyMode(defaultStateMap, 'CapsLock', 'force_on');
+    expect(updatedForceOn.CapsLock.mode).toBe('force_on');
+    expect(updatedForceOn.CapsLock.isCurrentlyActive).toBe(true);
   });
 
   test('updateLockKeyMode should handle invalid keys gracefully', () => {
@@ -58,21 +66,25 @@ describe('lockManager utility tests', () => {
     expect(result.alertMessage).toContain('無効化されています');
   });
 
-  test('evaluateKeyPressGuard should evaluate force_on when state becomes inactive', () => {
-    const stateMap = { ...defaultStateMap };
-    stateMap.NumLock.isCurrentlyActive = false;
-    const result = evaluateKeyPressGuard('NumLock', stateMap);
-    expect(result.shouldBlock).toBe(true);
-    expect(result.alertMessage).toContain('常時ONに固定されています');
+  test('evaluateKeyPressGuard should block WinKey (MetaLeft, OSLeft, OSRight) when force_off or blocked', () => {
+    const forceOffState = updateLockKeyMode(defaultStateMap, 'WinKey', 'force_off');
+    const resultMetaLeft = evaluateKeyPressGuard('MetaLeft', forceOffState);
+    expect(resultMetaLeft.shouldBlock).toBe(true);
+    expect(resultMetaLeft.alertMessage).toContain('常時OFFに固定されています');
+
+    const resultOSLeft = evaluateKeyPressGuard('OSLeft', forceOffState);
+    expect(resultOSLeft.shouldBlock).toBe(true);
+
+    const blockedState = updateLockKeyMode(defaultStateMap, 'WinKey', 'blocked');
+    const resultOSRight = evaluateKeyPressGuard('OSRight', blockedState);
+    expect(resultOSRight.shouldBlock).toBe(true);
+    expect(resultOSRight.alertMessage).toContain('無効化されています');
   });
 
-  test('evaluateKeyPressGuard should evaluate force_off when state becomes active', () => {
-    const stateMap = { ...defaultStateMap };
-    stateMap.NumLock.mode = 'force_off';
-    stateMap.NumLock.isCurrentlyActive = true;
-    const result = evaluateKeyPressGuard('NumLock', stateMap);
+  test('evaluateKeyPressGuard should evaluate force_on for keys', () => {
+    const result = evaluateKeyPressGuard('NumLock', defaultStateMap);
     expect(result.shouldBlock).toBe(true);
-    expect(result.alertMessage).toContain('常時OFFに固定されています');
+    expect(result.alertMessage).toContain('常時ONに固定されています');
   });
 
   test('evaluateKeyPressGuard should allow keypress when normal mode or unhandled key', () => {
